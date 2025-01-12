@@ -4,16 +4,11 @@ import io.restassured.response.Response;
 public class ApiAutomation {
 
     public static void main(String[] args) {
-        // Step 1: Send GET Request
         Response response = RestAssured.get("https://api.coindesk.com/v1/bpi/currentprice.json");
-
-        // Step 2: Verify Response Status Code
         if (response.getStatusCode() != 200) {
             System.out.println("request failed. Status code: " + response.getStatusCode());
             return;
         }
-
-        // Step 3: Parse and Verify Response
         response.then()
                 .assertThat()
                 .body("bpi", notNullValue())
