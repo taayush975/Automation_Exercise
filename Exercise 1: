@@ -1,0 +1,53 @@
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+public class EbayAutomation {
+
+    public static void main(String[] args) throws InterruptedException {
+        // Specify the ChromeDriver path
+        System.setProperty("webdriver.chrome.driver", "C:\\path\\to\\chromedriver.exe");
+
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--start-maximized");
+
+        WebDriver driver = new ChromeDriver(options);
+
+        try {
+            // Step 1: Navigate to eBay
+            driver.get("https://www.ebay.com");
+            Thread.sleep(2000); // Allow page to load fully
+
+            // Step 2: Search for 'Book'
+            WebElement searchBox = driver.findElement(By.id("gh-ac"));
+            searchBox.sendKeys("book");
+            searchBox.submit();
+            Thread.sleep(3000);
+
+            // Step 3: Click on the First Book
+            WebElement firstBook = driver.findElement(By.cssSelector(".s-item a"));
+            firstBook.click();
+            Thread.sleep(3000);
+
+            // Step 4: Add to Cart
+            WebElement addToCartButton = driver.findElement(By.id("atcRedesignId_btn"));
+            addToCartButton.click();
+            Thread.sleep(3000);
+
+            // Step 5: Verify Cart Update
+            WebElement cartCount = driver.findElement(By.id("gh-cart-n"));
+            String cartCountText = cartCount.getText();
+
+            if ("1".equals(cartCountText)) {
+                System.out.println("Cart verification passed!");
+            } else {
+                System.out.println("Cart verification failed. Expected 1, found: " + cartCountText);
+            }
+        } finally {
+            // Close the browser
+            driver.quit();
+        }
+    }
+}
